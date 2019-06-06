@@ -37,7 +37,7 @@ class VQwDataHandler:  virtual public VQwDataHandlerCloneable {
     typedef std::vector< VQwHardwareChannel* >::iterator Iterator_HdwChan;
     typedef std::vector< VQwHardwareChannel* >::const_iterator ConstIterator_HdwChan;
 
-    VQwDataHandler(const TString& name):fName(name),fPrefix(""),fKeepRunningSum(kFALSE) {}
+    VQwDataHandler(const TString& name);
     VQwDataHandler(const VQwDataHandler &source);
 
     virtual void ParseConfigFile(QwParameterFile& file);

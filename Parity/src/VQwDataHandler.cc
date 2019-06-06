@@ -32,6 +32,10 @@ using namespace std;
 #endif // __USE_DATABASE__
 
 
+VQwDataHandler::VQwDataHandler(const TString& name)
+: fName(name),fPrefix(""),fKeepRunningSum(kFALSE)
+{ }
+
 VQwDataHandler::VQwDataHandler(const VQwDataHandler &source):
   fPriority(source.fPriority),
   fName(source.fName),
@@ -50,7 +54,6 @@ VQwDataHandler::VQwDataHandler(const VQwDataHandler &source):
     const QwVQWK_Channel* vqwk = dynamic_cast<const QwVQWK_Channel*>(source.fOutputVar[i]);
     this->fOutputVar[i] = new QwVQWK_Channel(*vqwk, VQwDataElement::kDerived);
   }
-
 }
 
 
