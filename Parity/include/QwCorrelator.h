@@ -19,12 +19,14 @@ Last Modified: August 1, 2018 1:43 PM
 #include "VQwDataHandler.h"
 
 // LinRegBlue Correlator Class
-#include "QwkRegBlueCorrelator.h"
+#include "LinReg_Bevington_Pebay.h"
 
 class QwCorrelator : public VQwDataHandler, public MQwDataHandlerCloneable<QwCorrelator>{
  public:
   /// \brief Constructor with name
   QwCorrelator(const TString& name);
+  /// \brief Virtual destructor
+  virtual ~QwCorrelator();
 
   void ParseConfigFile(QwParameterFile& file);
 
@@ -44,8 +46,8 @@ class QwCorrelator : public VQwDataHandler, public MQwDataHandlerCloneable<QwCor
  protected:
   bool fDisableHistos;
   
-  std::vector< TString > fIndependentFull;
-  std::vector< TString > fDependentFull;
+  std::vector< std::string > fIndependentFull;
+  std::vector< std::string > fDependentFull;
     
   //  Using the fDependentType and fDependentName from base class, but override the IV arrays
   std::vector< EQwHandleType > fIndependentType;
@@ -63,12 +65,35 @@ class QwCorrelator : public VQwDataHandler, public MQwDataHandlerCloneable<QwCor
   std::vector< Int_t > fErrCounts_DV;
 
  private:
-		
-  //Default Constructor
-  QwCorrelator():corA("input") { };
-		
-  QwkRegBlueCorrelator corA;
-		
+
+  TString mCore;
+  int nP, nY;
+
+  // histograms
+  enum {mxHA=4};
+  TH1 * hA[mxHA];
+
+  // monitoring histos for iv & dv
+  TH1 ** h1iv, **h2iv, ** h1dv, **h2dv;
+  void initHistos(std::vector<std::string> ivName, std::vector<std::string> dvName);
+
+  LinRegBevPeb linReg;
+
+ public:
+
+  void addEvent(double *Pvec, double *Yvec);
+
+  void exportAlphas(
+      const std::string& outPath,
+      const std::vector<std::string>& ivName,
+      const std::vector<std::string>& dvName);
+
+  void exportAlias(
+      const std::string& outPath,
+      const std::string& macroName,
+      const std::vector<std::string>& ivName,
+      const std::vector<std::string>& dvName) const;
+
 };
 
 
